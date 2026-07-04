@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>3SE — Method</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:          #0d1b2a;
+      --ink-mid:      #2e4057;
+      --ink-light:    #6b7f96;
+      --paper:        #f4f7fb;
+      --paper-warm:   #e8f0f9;
+      --accent:       #1a5faa;
+      --accent-light: #c8ddf2;
+      --rule:         #c5d5e8;
+      --white:        #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 17px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(244, 247, 251, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--rule);
+      animation: fadeDown 0.6s ease both;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-mid);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 8rem 4rem;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 2rem;
+      height: 1px;
+      background: var(--accent);
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 6vw, 6rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 1.2rem;
+    }
+    .hero-title .accent { color: var(--accent); }
+    .hero-tagline {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      color: var(--ink-mid);
+      margin-bottom: 2rem;
+    }
+    .hero-desc {
+      font-size: 1rem;
+      color: var(--ink-mid);
+      max-width: 480px;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+    }
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 0.9rem 2rem;
+      background: var(--accent);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: #134d8c; transform: translateY(-2px); }
+
+    .hero-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--ink);
+      position: relative;
+      overflow: hidden;
+      animation: fadeIn 1s 0.4s ease both;
+    }
+    .hero-right::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, #0d2d52 0%, var(--ink) 70%);
+    }
+
+    /* Socratic dialogue mockup */
+    .dialogue-visual {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 460px;
+      padding: 0 2rem;
+    }
+    .dialogue-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .dialogue-turn {
+      padding: 0.9rem 1.2rem;
+      border-left: 2px solid;
+      border-radius: 0 4px 4px 0;
+    }
+    .dialogue-turn.skill {
+      border-left-color: #5b9bd5;
+      background: rgba(91,155,213,0.08);
+    }
+    .dialogue-turn.human {
+      border-left-color: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.03);
+      margin-left: 1.4rem;
+    }
+    .dialogue-role {
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .dialogue-turn.skill .dialogue-role { color: #7ab8e8; }
+    .dialogue-turn.human .dialogue-role { color: rgba(255,255,255,0.35); }
+    .dialogue-text {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.88);
+    }
+    .dialogue-turn.human .dialogue-text {
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.65);
+    }
+    .dialogue-result {
+      margin-top: 0.4rem;
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      color: #7ab8e8;
+      border: 1px solid rgba(91,155,213,0.35);
+      border-radius: 999px;
+      padding: 0.6rem 1.2rem;
+    }
+
+    .hero-stat-bar {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      gap: 3rem;
+    }
+    .hero-stat { text-align: center; }
+    .hero-stat-num {
+      font-family: 'DM', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      display: block;
+    }
+    .hero-stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 7rem 4rem; }
+    .section-inner { max-width: 1080px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 1.5rem;
+      height: 1px;
+      background: var(--accent);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .section-lead {
+      font-size: 1.1rem;
+      color: var(--ink-mid);
+      max-width: 680px;
+      line-height: 1.8;
+    }
+    hr.rule {
+      border: none;
+      border-top: 1px solid var(--rule);
+      margin: 0;
+    }
+
+    /* ── MAIEUTIC / PATTERNS ── */
+    .maieutic-section { background: var(--white); }
+    .patterns-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      margin-top: 4rem;
+      border: 1px solid var(--rule);
+    }
+    .pattern-card {
+      padding: 2.5rem;
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease, background 0.2s;
+    }
+    .pattern-card.visible { opacity: 1; transform: translateY(0); }
+    .pattern-card:hover { background: var(--paper); }
+    .pattern-card:nth-child(2n) { border-right: none; }
+    .pattern-card:nth-child(3), .pattern-card:nth-child(4) { border-bottom: none; }
+    .pattern-num {
+      font-family: 'DM', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--accent-light);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+    .pattern-title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.6rem;
+    }
+    .pattern-question {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+    .pattern-desc {
+      font-size: 0.92rem;
+      color: var(--ink-light);
+      line-height: 1.7;
+    }
+
+    /* ── TETRAHEDRON MAP ── */
+    .map-section { background: var(--paper-warm); }
+    .map-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 4rem;
+      align-items: start;
+      margin-top: 4rem;
+    }
+    .map-visual {
+      position: sticky;
+      top: 8rem;
+      background: var(--white);
+      border: 1px solid var(--rule);
+      padding: 2rem;
+    }
+    .map-visual svg { width: 100%; height: auto; }
+
+    .edge-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    .edge-card {
+      background: var(--white);
+      padding: 1.8rem 2rem;
+      display: grid;
+      grid-template-columns: 2.6rem 1fr;
+      gap: 1.2rem;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease, background 0.2s;
+    }
+    .edge-card.visible { opacity: 1; transform: translateY(0); }
+    .edge-card:hover { background: var(--paper); }
+    .edge-num {
+      width: 2.6rem;
+      height: 2.6rem;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-family: 'DM', serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .edge-pair {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+    .edge-role {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+    .edge-skill {
+      font-size: 0.82rem;
+      color: var(--ink-light);
+      margin-bottom: 0.6rem;
+    }
+    .edge-desc {
+      font-size: 0.9rem;
+      color: var(--ink-mid);
+      line-height: 1.6;
+      margin-bottom: 0.7rem;
+    }
+    .edge-question {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--accent);
+      line-height: 1.5;
+    }
+
+    /* ── TECH CHAIN (condensed) ── */
+    .chain-section { background: var(--white); padding: 5rem 4rem; }
+    .chain-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 0;
+      margin-top: 3rem;
+    }
+    .chain-chip {
+      flex: 1 1 140px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding: 1.2rem 1.4rem;
+      border: 1px solid var(--rule);
+      background: var(--paper);
+    }
+    .chain-chip + .chain-chip { border-left: none; }
+    .chain-chip-tech {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .chain-chip-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .chain-chip-desc {
+      font-size: 0.78rem;
+      color: var(--ink-light);
+      line-height: 1.5;
+    }
+    .chain-note {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      font-style: italic;
+      color: var(--ink-light);
+      max-width: 680px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--ink);
+      text-align: center;
+      padding: 8rem 4rem;
+    }
+    .cta-section .section-label { justify-content: center; color: #7ab8e8; }
+    .cta-section .section-label::before { background: #7ab8e8; }
+    .cta-section .section-title { margin: 1rem 0 1.5rem; color: var(--white); }
+    .cta-section .section-lead { margin: 0 auto 3rem; color: rgba(255,255,255,0.6); }
+    .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.4);
+      text-align: center;
+      padding: 2.5rem 4rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    footer a:hover { color: var(--white); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { min-height: 420px; padding: 3rem 0; }
+      .hero-left { padding: 6rem 2rem 3rem; }
+      section { padding: 5rem 2rem; }
+      .chain-section { padding: 4rem 2rem; }
+      .patterns-grid { grid-template-columns: 1fr; }
+      .pattern-card { border-right: none !important; }
+      .pattern-card:last-child { border-bottom: none; }
+      .map-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+      .map-visual { position: static; }
+      .edge-card { grid-template-columns: 2.2rem 1fr; }
+      .chain-chip { flex: 1 1 100%; border-left: 1px solid var(--rule) !important; }
+      .chain-chip + .chain-chip { border-top: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="https://www.3se.info/index.html">
+    <svg width="28" height="28" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:8px;">
+      <g stroke="#1a5faa" stroke-width="14" stroke-linejoin="round">
+        <line x1="170" y1="30" x2="50"  y2="270"/>
+        <line x1="170" y1="30" x2="290" y2="270"/>
+        <line x1="170" y1="30" x2="170" y2="220"/>
+        <line x1="50"  y1="270" x2="290" y2="270"/>
+        <line x1="50"  y1="270" x2="170" y2="220"/>
+        <line x1="290" y1="270" x2="170" y2="220"/>
+      </g>
+      <g stroke="#1a5faa" stroke-width="8" stroke-dasharray="18 12" opacity="0.45">
+        <line x1="170" y1="148" x2="50"  y2="270"/>
+        <line x1="170" y1="148" x2="290" y2="270"/>
+        <line x1="170" y1="148" x2="170" y2="220"/>
+      </g>
+      <circle cx="170" cy="30"  r="14" fill="#1a5faa"/>
+      <circle cx="50"  cy="270" r="10" fill="#1a5faa" opacity="0.7"/>
+      <circle cx="290" cy="270" r="10" fill="#1a5faa" opacity="0.7"/>
+      <circle cx="170" cy="220" r="10" fill="#1a5faa" opacity="0.7"/>
+    </svg>3<span>SE</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="https://www.3se.info/index.html#why">Why 3SE</a></li>
+    <li><a href="https://www.3se.info/index.html#tetrahedron">Tetrahedron</a></li>
+    <li><a href="https://www.3se.info/index.html#contents">Contents</a></li>
+    <li><a href="https://www.3se.info/index.html#agile">Agile</a></li>
+    <li><a href="https://www.3se.info/#cta">Get started</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="hero-eyebrow">System · Safety · Security Engineering</div>
+    <h1 class="hero-title">Engineer<br>complexity<br>through <span class="accent">questions.</span></h1>
+    <p class="hero-tagline">Think harder, engineer better.</p>
+    <p class="hero-desc">
+      Every 3SE role is built on a simple principle: don't answer for the engineer — ask the question a seasoned practitioner would ask, and let the 3SE method capture what emerges.
+    </p>
+    <div class="hero-cta">
+      <a href="#maieutic" class="btn-primary">Discover the method</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="dialogue-visual">
+      <div class="dialogue-card">
+        <div class="dialogue-turn skill">
+          <div class="dialogue-role">3SE skill asks</div>
+          <p class="dialogue-text">What is the goal they want to achieve?</p>
+        </div>
+        <div class="dialogue-turn human">
+          <div class="dialogue-role">Business Owner answers</div>
+          <p class="dialogue-text">As an Operations Analyst, I want to detect anomalies in transaction logs in real time in order to prevent fraud losses.</p>
+        </div>
+        <div class="dialogue-turn skill">
+          <div class="dialogue-role">3SE skill asks</div>
+          <p class="dialogue-text">Is this concrete enough to allocate directly to a feature — or can it still decompose into two or more sub-goals?</p>
+        </div>
+        <div class="dialogue-turn human">
+          <div class="dialogue-role">Business Owner answers</div>
+          <p class="dialogue-text">It's concrete. Allocate it.</p>
+        </div>
+        <div class="dialogue-result">→ formalized as Goal · Feature</div>
+      </div>
+    </div>
+    <div class="hero-stat-bar">
+      <div class="hero-stat">
+        <span class="hero-stat-num">8</span>
+        <span class="hero-stat-label">Roles</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">6</span>
+        <span class="hero-stat-label">Trade-offs</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">1</span>
+        <span class="hero-stat-label">Method</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- MAIEUTIC METHOD -->
+<section class="maieutic-section" id="maieutic">
+  <div class="section-inner">
+    <div class="section-label">The Principle</div>
+    <h2 class="section-title">Questions, not<br>instructions.</h2>
+    <p class="section-lead">
+      Socrates called it <em>maieutics</em> — the art of midwifery applied to ideas: the belief that truth is not poured into the learner but drawn out of them through disciplined questioning.
+    </p>
+    <p class="section-lead">
+      Every 3SE role is built on a simple principle. It does not hand a role a finished goal, requirement, or hazard — it asks the question a seasoned practitioner would ask, and only checks the answer against the 3SE ontology.
+    </p>
+    <div class="patterns-grid">
+      <div class="pattern-card">
+        <div class="pattern-num">01</div>
+        <div class="pattern-title">Elicitation</div>
+        <p class="pattern-question">"What concept is this, really?"</p>
+        <p class="pattern-desc">Surfaces the 3SE concept behind an answer, instead of accepting the first formulation at face value.</p>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">02</div>
+        <div class="pattern-title">Falsification</div>
+        <p class="pattern-question">"What evidence would prove this wrong?"</p>
+        <p class="pattern-desc">Turns an answer into something evaluable before it is ever baselined as a 3SE fact.</p>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">03</div>
+        <div class="pattern-title">Contradiction</div>
+        <p class="pattern-question">"Does this conflict with something you already baselined?"</p>
+        <p class="pattern-desc">Surfaces silent inconsistencies between answers before they compound.</p>
+      </div>
+      <div class="pattern-card">
+        <div class="pattern-num">04</div>
+        <div class="pattern-title">Allocation</div>
+        <p class="pattern-question">"Who — or what — actually owns this?"</p>
+        <p class="pattern-desc">Forces a single accountable element for every answer instead of leaving it implicit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- TETRAHEDRON MAP -->
+<section class="map-section" id="tetrahedron">
+  <div class="section-inner">
+    <div class="section-label">The Map</div>
+    <h2 class="section-title">Eight roles, six<br>trade-offs.</h2>
+    <p class="section-lead">
+      The 3SE tetrahedron has four domains — Business, Engineering, Asset, Project — and six edges, each one a trade-off between two of them.
+    </p>
+    <p class="section-lead">
+      Eight 3SE skills sit across those six edges — most alone on their edge, two edges shared by a pair of roles whose analyses mirror each other from opposite sides of the same trade-off.
+    </p>
+    <div class="map-layout">
+      <div class="map-visual">
+        <svg viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer edges -->
+          <g stroke="#1a5faa" stroke-width="1.5" opacity="0.55">
+            <line x1="170" y1="30" x2="50"  y2="270"/>
+            <line x1="170" y1="30" x2="290" y2="270"/>
+            <line x1="170" y1="30" x2="170" y2="220"/>
+            <line x1="50"  y1="270" x2="290" y2="270"/>
+            <line x1="50"  y1="270" x2="170" y2="220"/>
+            <line x1="290" y1="270" x2="170" y2="220"/>
+          </g>
+          <!-- Depth cue -->
+          <g stroke="#1a5faa" stroke-width="1" stroke-dasharray="4 3" opacity="0.3">
+            <line x1="170" y1="148" x2="50"  y2="270"/>
+            <line x1="170" y1="148" x2="290" y2="270"/>
+            <line x1="170" y1="148" x2="170" y2="220"/>
+          </g>
+          <!-- Vertex nodes -->
+          <circle cx="170" cy="30"  r="6" fill="#1a5faa"/>
+          <circle cx="50"  cy="270" r="5" fill="#1a5faa" opacity="0.75"/>
+          <circle cx="290" cy="270" r="5" fill="#1a5faa" opacity="0.75"/>
+          <circle cx="170" cy="220" r="5" fill="#1a5faa" opacity="0.75"/>
+          <!-- Vertex labels -->
+          <text x="170" y="16"  text-anchor="middle" fill="#0d1b2a" font-family="'Playfair Display', serif" font-weight="700" font-size="15">Engineering</text>
+          <text x="30"  y="292" text-anchor="middle" fill="#0d1b2a" font-family="'Playfair Display', serif" font-weight="700" font-size="14">Business</text>
+          <text x="310" y="292" text-anchor="middle" fill="#0d1b2a" font-family="'Playfair Display', serif" font-weight="700" font-size="14">Project</text>
+          <text x="170" y="240" text-anchor="middle" fill="#0d1b2a" font-family="'Playfair Display', serif" font-weight="700" font-size="14">Asset</text>
+
+          <!-- Edge markers: numbered, matching the legend -->
+          <!-- 1: Business-Project -->
+          <circle cx="170" cy="268" r="14" fill="#ffffff" stroke="#1a5faa" stroke-width="1.5"/>
+          <circle cx="170" cy="268" r="12" fill="#c8ddf2"/>
+          <text x="170" y="272" text-anchor="middle" fill="#1a5faa" font-family="'DM Sans', sans-serif" font-weight="700" font-size="13">1</text>
+          <!-- 2: Business-Asset -->
+          <circle cx="97" cy="250" r="14" fill="#ffffff" stroke="#1a5faa" stroke-width="1.5"/>
+          <circle cx="97" cy="250" r="12" fill="#c8ddf2"/>
+          <text x="97" y="255" text-anchor="middle" fill="#1a5faa" font-family="'DM Sans', sans-serif" font-weight="700" font-size="13">2</text>
+          <!-- 3: Business-Engineering -->
+          <circle cx="112" cy="142" r="14" fill="#ffffff" stroke="#1a5faa" stroke-width="1.5"/>
+          <circle cx="112" cy="142" r="12" fill="#c8ddf2"/>
+          <text x="112" y="147" text-anchor="middle" fill="#1a5faa" font-family="'DM Sans', sans-serif" font-weight="700" font-size="13">3</text>
+          <!-- 4: Engineering-Asset -->
+          <circle cx="170" cy="100" r="14" fill="#ffffff" stroke="#1a5faa" stroke-width="1.5"/>
+          <circle cx="170" cy="100" r="12" fill="#c8ddf2"/>
+          <text x="170" y="105" text-anchor="middle" fill="#1a5faa" font-family="'DM Sans', sans-serif" font-weight="700" font-size="13">4</text>
+          <!-- 5: Engineering-Project -->
+          <circle cx="228" cy="142" r="14" fill="#ffffff" stroke="#1a5faa" stroke-width="1.5"/>
+          <circle cx="228" cy="142" r="12" fill="#c8ddf2"/>
+          <text x="228" y="147" text-anchor="middle" fill="#1a5faa" font-family="'DM Sans', sans-serif" font-weight="700" font-size="13">5</text>
+          <!-- 6: Asset-Project -->
+          <circle cx="243" cy="250" r="14" fill="#ffffff" stroke="#1a5faa" stroke-width="1.5"/>
+          <circle cx="243" cy="250" r="12" fill="#c8ddf2"/>
+          <text x="243" y="255" text-anchor="middle" fill="#1a5faa" font-family="'DM Sans', sans-serif" font-weight="700" font-size="13">6</text>
+        </svg>
+      </div>
+
+      <div class="edge-list">
+        <div class="edge-card" id="edge-1">
+          <div class="edge-num">1</div>
+          <div>
+            <div class="edge-pair">Business ↔ Project</div>
+            <div class="edge-role">Business Owner</div>
+            <div class="edge-skill">Goal &amp; value analysis</div>
+            <p class="edge-desc">Is this goal worth the investment, given what the project can actually deliver?</p>
+            <p class="edge-question">"If we shipped nothing, what would it cost the business — and who would feel it first?"</p>
+          </div>
+        </div>
+        <div class="edge-card" id="edge-2">
+          <div class="edge-num">2</div>
+          <div>
+            <div class="edge-pair">Business ↔ Asset</div>
+            <div class="edge-role">Product Owner · Service Owner</div>
+            <div class="edge-skill">Feature, product/service &amp; release analysis</div>
+            <p class="edge-desc">Which product or service actually carries this value to the stakeholder — and when does either become the asset itself?</p>
+            <p class="edge-question">"If this feature disappeared tomorrow, which product or service would stakeholders miss — and why?"</p>
+          </div>
+        </div>
+        <div class="edge-card" id="edge-3">
+          <div class="edge-num">3</div>
+          <div>
+            <div class="edge-pair">Business ↔ Engineering</div>
+            <div class="edge-role">System Engineer</div>
+            <div class="edge-skill">Stakeholder requirement &amp; operational analysis</div>
+            <p class="edge-desc">What must the system actually do to satisfy what was asked?</p>
+            <p class="edge-question">"Walk me through the worst day this system will have — what is it doing at that moment?"</p>
+          </div>
+        </div>
+        <div class="edge-card" id="edge-4">
+          <div class="edge-num">4</div>
+          <div>
+            <div class="edge-pair">Engineering ↔ Asset</div>
+            <div class="edge-role">System Architect</div>
+            <div class="edge-skill">Functional &amp; physical architecture</div>
+            <p class="edge-desc">Which physical or digital element is actually accountable for this function?</p>
+            <p class="edge-question">"If two functions both claim this behavior, which element really owns it?"</p>
+          </div>
+        </div>
+        <div class="edge-card" id="edge-5">
+          <div class="edge-num">5</div>
+          <div>
+            <div class="edge-pair">Engineering ↔ Project</div>
+            <div class="edge-role">System Validation Engineer · System Quality Engineer</div>
+            <div class="edge-skill">System validation &amp; verification analysis</div>
+            <p class="edge-desc">Verification asks whether it was built right, against the rules. Validation asks whether the right thing was delivered, against the requirements — both close the loop at delivery.</p>
+            <p class="edge-question">"If we verified this against the rules but never validated it against the requirements, what would we miss?"</p>
+          </div>
+        </div>
+        <div class="edge-card" id="edge-6">
+          <div class="edge-num">6</div>
+          <div>
+            <div class="edge-pair">Asset ↔ Project</div>
+            <div class="edge-role">System Risk Engineer</div>
+            <div class="edge-skill">Risk analysis</div>
+            <p class="edge-desc">What could this asset's failure cost the project — and who would notice first?</p>
+            <p class="edge-question">"If this failed silently, how late would you find out — and what happens in the meantime?"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- TECHNICAL CHAIN (condensed) -->
+<section class="chain-section" id="chain">
+  <div class="section-inner">
+    <div class="section-label">Underneath</div>
+    <h2 class="section-title" style="font-size: clamp(1.6rem, 2.5vw, 2.2rem);">A chain that keeps every answer valid.</h2>
+    <p class="section-lead" style="font-size: 1rem;">
+      The dialogue only works because every answer lands somewhere well-defined. Five analyses carry it from a stakeholder's value all the way to a release — the same backbone agile teams have always worked from, now made explicit, traceable, and shared across every 3SE role.
+    </p>
+    <div class="chain-strip">
+      <div class="chain-chip">
+        <div class="chain-chip-tech">01</div>
+        <div class="chain-chip-name">Value analysis</div>
+        <p class="chain-chip-desc">What value the goal delivers to the stakeholder</p>
+      </div>
+      <div class="chain-chip">
+        <div class="chain-chip-tech">02</div>
+        <div class="chain-chip-name">Goal analysis</div>
+        <p class="chain-chip-desc">Decompose the goal, or allocate it to a feature</p>
+      </div>
+      <div class="chain-chip">
+        <div class="chain-chip-tech">03</div>
+        <div class="chain-chip-name">Feature analysis</div>
+        <p class="chain-chip-desc">What feature actually contributes to that goal</p>
+      </div>
+      <div class="chain-chip">
+        <div class="chain-chip-tech">04</div>
+        <div class="chain-chip-name">Product &amp; service analysis</div>
+        <p class="chain-chip-desc">What product or service realizes that feature</p>
+      </div>
+      <div class="chain-chip">
+        <div class="chain-chip-tech">05</div>
+        <div class="chain-chip-name">Release analysis</div>
+        <p class="chain-chip-desc">What release actually delivers it to stakeholders</p>
+      </div>
+    </div>
+    <p class="chain-note">Each analysis only ever formalizes what the dialogue already surfaced — the chain never replaces a question with a guess.</p>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="section-inner">
+    <div class="section-label" style="justify-content: center;">Get Started</div>
+    <h2 class="section-title">Ready to engineer<br>with one voice?</h2>
+    <p class="section-lead">
+      3SE is community-driven. Explore the framework, the language, and the tooling — and join the movement toward risk-centric integrative engineering.
+    </p>
+    <div class="cta-btns">
+      <a href="https://regis-casteran.gitbook.io/jarvis4se/" target="_blank" class="btn-primary">Explore JARVIS4SE ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2022 3SE — System, Safety & Security Engineering &nbsp;·&nbsp; <a href="https://www.3se.info/">www.3se.info</a></p>
+</footer>
+
+<script>
+  // Scroll-triggered reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), entry.target.dataset.delay || 0);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.pattern-card, .edge-card').forEach((el, i) => {
+    el.dataset.delay = (i % 4) * 100;
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
