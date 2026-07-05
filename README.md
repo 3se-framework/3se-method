@@ -10,7 +10,7 @@ Socrates called it *maieutics* — the art of midwifery applied to ideas: the be
 
 Every 3SE role is built on a simple principle. It does not hand a role a finished goal, requirement, or hazard — it asks the question a seasoned practitioner would ask, and only checks the answer against the 3SE ontology.
 
-Four question patterns recur across every 3SE skill:
+Four question patterns recur across every 3SE role:
 
 **Elicitation** — *"What concept is this, really?"*
 Surfaces the 3SE concept behind an answer, instead of accepting the first formulation at face value.
@@ -28,9 +28,9 @@ Forces a single accountable element for every answer instead of leaving it impli
 
 The 3SE tetrahedron has four domains — Business, Engineering, Asset, Project — and six edges, each one a trade-off between two of them.
 
-Eight 3SE skills sit across those six edges — most alone on their edge, two edges shared by a pair of roles whose analyses mirror each other from opposite sides of the same trade-off.
+Eight 3SE roles sit across those six edges — most alone on their edge, two edges shared by a pair of roles whose analyses mirror each other from opposite sides of the same trade-off.
 
-| Edge | Trade-off | Role(s) | Skill | Maieutic question |
+| Edge | Trade-off | Role(s) | Analysis | Maieutic question |
 |---|---|---|---|---|
 | 1 | Business ↔ Project | Business Owner | Goal & value analysis | *"If we shipped nothing, what would it cost the business — and who would feel it first?"* |
 | 2 | Business ↔ Asset | Product Owner · Service Owner | Feature, product/service & release analysis | *"If this feature disappeared tomorrow, which product or service would stakeholders miss — and why?"* |
