@@ -24,20 +24,20 @@ Surfaces silent inconsistencies between answers before they compound.
 **Allocation** — *"Who — or what — actually owns this?"*
 Forces a single accountable element for every answer instead of leaving it implicit.
 
-## Eight Roles, Six Trade-offs
+## Ten Roles, Six Trade-offs
 
 The 3SE tetrahedron has four domains — Business, Engineering, Asset, Project — and six edges, each one a trade-off between two of them.
 
-Eight 3SE roles sit across those six edges — most alone on their edge, two edges shared by a pair of roles whose analyses mirror each other from opposite sides of the same trade-off.
+Ten 3SE roles sit across those six edges — two edges held alone, four edges shared by a pair of roles whose analyses pull on the same trade-off from complementary angles.
 
-| Edge | Trade-off | Role(s) | Analysis | Maieutic question |
-|---|---|---|---|---|
-| 1 | Business ↔ Project | Business Owner | Goal & value analysis | *"If we shipped nothing, what would it cost the business — and who would feel it first?"* |
-| 2 | Business ↔ Asset | Product Owner · Service Owner | Feature, product/service & release analysis | *"If this feature disappeared tomorrow, which product or service would stakeholders miss — and why?"* |
-| 3 | Business ↔ Engineering | System Engineer | Stakeholder requirement & operational analysis | *"Walk me through the worst day this system will have — what is it doing at that moment?"* |
-| 4 | Engineering ↔ Asset | System Architect | Functional & physical architecture | *"If two functions both claim this behavior, which element really owns it?"* |
-| 5 | Engineering ↔ Project | System Validation Engineer · System Quality Engineer | System validation & verification analysis | *"If we verified this against the rules but never validated it against the requirements, what would we miss?"* |
-| 6 | Asset ↔ Project | System Risk Engineer | Risk analysis | *"If this failed silently, how late would you find out — and what happens in the meantime?"* |
+| Edge | Trade-off              | Role(s)                                              | Analysis                                                 | Maieutic question                                                                                                               |
+|------|------------------------|------------------------------------------------------|----------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| 1    | Business ↔ Project     | Business Owner                                       | Goal & value analysis                                    | *"If we shipped nothing, what would it cost the business — and who would feel it first?"*                                       |
+| 2    | Business ↔ Asset       | Product Owner · Service Owner                        | Feature, product/service & release analysis              | *"If this feature disappeared tomorrow, which product or service would stakeholders miss — and why?"*                           |
+| 3    | Business ↔ Engineering | System Engineer                                      | Stakeholder requirement & operational analysis           | *"Walk me through the worst day this system will have — what is it doing at that moment?"*                                      |
+| 4    | Engineering ↔ Asset    | System Architect · System Configuration Engineer     | Functional, physical architecture & variability analysis | *"If two functions both claim this behavior, which element really owns it — and does that answer still hold in every variant?"* |
+| 5    | Engineering ↔ Project  | System Validation Engineer · System Quality Engineer | System validation & verification analysis                | *"If we verified this against the rules but never validated it against the requirements, what would we miss?"*                  |
+| 6    | Asset ↔ Project        | System Risk Engineer · Project Owner                 | Risk & project analysis                                  | *"If this failed silently, how late would you find out — and what would it cost the schedule to catch it then?"*                |
 
 Validation checks the system against its requirements — did we build what was asked? Verification checks it against the method's own rules — quality criteria, conventions, structural consistency. Both close the loop at delivery.
 
